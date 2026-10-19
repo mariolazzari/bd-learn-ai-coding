@@ -22,3 +22,32 @@ Not every AI coding tool does the same job. "Agents" became a wild buzzword over
 #### Sloperator
 
 In this course, we'll be working on "Sloperator," an interpreter for the SlopLang programming language. You'll use OpenCode to help you build Sloperator and learn about effective agentic AI usage. Sloperator is written in Python, but runs .slop files, which are text files containing SlopLang code.
+
+```sh
+# install OpenCode
+curl -fsSL https://opencode.ai/v2/install | bash
+# install uv
+curl -fsSL https://docs.astral.sh/uv/install.sh | bash
+# check versions
+opencode --version
+uv --version
+# starter code
+cd starter
+uv sync
+opencode
+```
+
+### OpenCode console
+
+[OpenCode Console](https://opencode.ai/console/) is a suite of hosted services offered by the same team that develops the OpenCode agent. The console gives you access to a large catalog of AI coding models, some of which are free, which means you can complete this course _without paying anything_.
+
+#### Commands
+
+- Using the **/connect** command inside an OpenCode session connects to a provider like OpenCode Console or ChatGPT:
+- The **/models** command opens the model selector, so you can search for a model and switch to it.
+
+#### Gui clients
+
+```sh
+opencode pair
+```
