@@ -51,3 +51,20 @@ opencode
 ```sh
 opencode pair
 ```
+
+## Models and providers
+
+### Providers and models
+
+- A **provider** is the service OpenCode uses a model through, like OpenAI, Anthropic, Google, or OpenCode Go.
+- A **model** is the specific LLM you use through that provider, like gpt-5, claude-sonnet-4-5, gemini-3.1-pro, or deepseek-v4.1-flash-free.
+
+### Model costs
+
+| Developer Model Input Cost (1M Tokens) | Output Cost (1M Tokens) |
+| -------------------------------------- | ----------------------- |
+| OpenAI gpt-6-astra                     | $10.00	$50.00            |
+| OpenAI gpt-5.6-sol                     | $4.00	$20.00             |
+| Anthropic claude-fable-5-1             | $10.00	$50.00            |
+| Anthropic claude-opus-5-5              | $4.00	$20.00             |
+| Google gemini-4-argon                  | $2.00	$10.00             |
