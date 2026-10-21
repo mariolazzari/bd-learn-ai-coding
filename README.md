@@ -68,3 +68,35 @@ opencode pair
 | Anthropic claude-fable-5-1             | $10.00	$50.00            |
 | Anthropic claude-opus-5-5              | $4.00	$20.00             |
 | Google gemini-4-argon                  | $2.00	$10.00             |
+
+### Open-weight models
+
+This isn't a course on LLM architecture, but at a high level the process looks like this:
+
+- Gather a massive dataset – Reddit posts, GitHub repos, tweets, Wikipedia articles, etc.
+- Run that text through a training process that adjusts the model's internal parameters, its "weights," to reduce prediction error.
+- The end result is a giant file full of numbers that encode the patterns the model learned during training.
+
+### Self hosting models
+
+In OpenCode, local/self-hosted usage is often done via:
+
+- LM Studio
+- Ollama
+- llama.cpp / llama-server
+
+### Pay per token
+
+| Model                    | Model ID                   | Input (per 1M) | Output (per 1M) |
+| ------------------------ | -------------------------- | -------------: | --------------: |
+| DeepSeek V4.1 Flash Free | `deepseek-v4.1-flash-free` |           Free |            Free |
+| GPT 5.6                  | `sol gpt-5.6-sol`          |          $4.00 |          $20.00 |
+| Claude Opus 5            | `claude-opus-5`            |          $5.00 |          $25.00 |
+| Claude Fable 5.1         | `claude-fable-5-1`         |         $10.00 |          $50.00 |
+
+## Tools
+
+### What is a tool
+
+A tool is essentially a function the model is allowed to call. For example, OpenCode comes with a read tool that lets the model read files.
+The agent harness tells the model which tools are available, what each one does, and what arguments each accepts.

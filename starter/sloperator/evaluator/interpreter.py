@@ -174,7 +174,7 @@ class Interpreter:
             case TokenType.STAR:
                 return left * right
             case TokenType.SLASH:
-                return left // right
+                return self.divide(left, right, operator)
             case TokenType.LESS:
                 return left < right
             case TokenType.LESS_EQUAL:
@@ -185,6 +185,13 @@ class Interpreter:
                 return left >= right
             case _:
                 raise NotImplementedError(f"unknown operator {operator.lexeme}")
+
+    def divide(self, left: int, right: int, operator: Token) -> int:
+        if right == 0:
+            raise SlopRuntimeError(operator.line, "division by zero")
+        # SlopLang truncates toward zero; Python's // floors, so -7 / 2 must be -3, not -4.
+        quotient = abs(left) // abs(right)
+        return -quotient if (left < 0) != (right < 0) else quotient
 
     def add(self, left: Value, right: Value, operator: Token) -> Value:
         if is_number(left) and is_number(right):
