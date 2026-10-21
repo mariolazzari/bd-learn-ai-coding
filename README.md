@@ -100,3 +100,14 @@ In OpenCode, local/self-hosted usage is often done via:
 
 A tool is essentially a function the model is allowed to call. For example, OpenCode comes with a read tool that lets the model read files.
 The agent harness tells the model which tools are available, what each one does, and what arguments each accepts.
+
+### Built-in tools
+
+OpenCode has some built-in tools that you don't need to install yourself. The most important ones for day-to-day coding are:
+
+- _read_, glob, and grep for gathering context
+- _edit_, write, and patch for changing files
+- _shell_ for running commands
+- _webfetch_ and websearch for fetching pages and searching online
+- _question_ for asking you clarifying questions (which displays a custom selector UI)
+- _skill_ for loading reusable SKILL.md files (we'll cover these later)
