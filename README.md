@@ -111,3 +111,70 @@ OpenCode has some built-in tools that you don't need to install yourself. The mo
 - _webfetch_ and websearch for fetching pages and searching online
 - _question_ for asking you clarifying questions (which displays a custom selector UI)
 - _skill_ for loading reusable SKILL.md files (we'll cover these later)
+
+### Custom tools
+
+Custom tools are useful for specialized actions the agent performs repeatedly:
+
+- Querying an internal database safely
+- Calling a project-specific API
+- Wrapping a complicated script behind a simpler interface
+- Looking up metadata from a system the repo depends on
+
+### Create custom tool
+
+```sh
+cd .opencode
+bun add @opencode/plugin@2.0.3
+touch .opencode/plugins/database.ts
+```
+
+```ts
+import { Plugin } from "@opencode/plugin";
+
+export default Plugin.define({
+  id: "applymaxxing.database-tool",
+  setup: async (ctx) => {
+    await ctx.tool.transform((tools) => {
+      tools.add({
+        name: "database",
+        description: "Query the project database",
+        input: {
+          type: "object",
+          properties: {
+            query: { type: "string" },
+          },
+          required: ["query"],
+          additionalProperties: false,
+        },
+        options: { codemode: false },
+        execute: async (input) => {
+          const { query } = input as { query: string };
+          return { content: `Executed query: ${query}` };
+        },
+      });
+    });
+  },
+});
+```
+
+### Tool permissions
+
+OpenCode lets you decide whether a tool action should run automatically, ask first, or simply be denied using the permissions array in opencode.jsonc:
+
+```ts
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permissions": [
+    { "action": "shell", "resource": "*", "effect": "ask" },
+    { "action": "edit", "resource": "*", "effect": "allow" },
+    { "action": "webfetch", "resource": "*", "effect": "deny" },
+  ],
+}
+```
+
+h rule's effect is one of:
+
+- allow: run without approval
+- ask: prompt before running
+- deny: block the action
