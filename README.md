@@ -201,3 +201,30 @@ If you can't find an API endpoint that matches the functionality we need, pause 
 ### Steering
 
 A steering message gets picked up at the next step boundary (usually as soon as the tool calls it's running finish). The agent then keeps going on the same task with your new information in context.
+
+### Prompt box
+
+Some default TUI shortcuts include:
+
+- Enter sends the prompt. While the agent is working, it sends a steering message.
+- Shift+Enter adds a newline. If your terminal doesn't support that combination, try Ctrl+J.
+- Up recalls an earlier prompt when the cursor is at the start of the input. Down moves forward through prompt history when the cursor is at the end.
+- Ctrl+C clears the input field or, if the input is already clear, exits OpenCode.
+- Ctrl+X, then E, opens your prompt in your external editor (VISUAL, or EDITOR if VISUAL isn't set). Save and close the editor; OpenCode reads the draft back when the editor process exits. GUI editors need a wait flag, such as code --wait.
+
+### Queueing
+
+To queue a prompt, type it in, then press Ctrl+X before Enter to send it. The agent will finish its entire current task, then pick up the queued prompt and start working on that.
+
+- Steer: changes the work in flight (default)
+- Queue: waits until the current work is done, then sends the next prompt (Ctrl+X before Enter)
+
+### Prompt examples
+
+Prompting isn't a dark art. I'd take a technical domain expert who understands their customer over someone with a "Prompting for Dummies" cheatsheet any day.
+
+It's easy to learn to write better prompts. It's hard to learn to code and understand your customers' needs. That said, there are some basic rules to be aware of. Some providers even have guides on writing better prompts:
+
+### Speech to text
+
+You don't need to polish a spoken prompt as you would a PR description meant for a human. Agents have no problem understanding messy wording and corrections like "Um, actually, forget that, do this other thing," but what helps is the extra context you provide, not the additional words themselves.

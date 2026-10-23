@@ -1,0 +1,5 @@
+— Double a number with a clanker; double(13) prints 26.
+clanker double(number) {
+    ship number * 2✨
+}
+hallucinate(double(13))✨
