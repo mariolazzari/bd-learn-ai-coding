@@ -178,3 +178,26 @@ h rule's effect is one of:
 - allow: run without approval
 - ask: prompt before running
 - deny: block the action
+
+## Promptiung
+
+### Good prompt
+
+- Be specific (you need strong technical skills to be able to do this)
+- Define constraints
+- Add meaningful context
+- Describe edge cases
+- Provide validation instructions
+
+### Plan agent
+
+- Build (default): The agent can take action on the codebase: edit files, run commands, use tools.
+- Plan: The agent can inspect the project, run shell commands, ask questions, and plan changes. OpenCode blocks its edit, write, and patch tool calls from modifying project files – except for dedicated plan files.
+
+### Cancelling
+
+If you can't find an API endpoint that matches the functionality we need, pause and ask me what to do next.
+
+### Steering
+
+A steering message gets picked up at the next step boundary (usually as soon as the tool calls it's running finish). The agent then keeps going on the same task with your new information in context.

@@ -61,7 +61,10 @@ class Interpreter:
         match statement:
             case VarDecl(name, initializer, mutable):
                 value = self.evaluate(initializer)
-                self.environment.declare(name.lexeme, value, mutable, name.line)
+                # Only loadbearing produces an immutable VarDecl, so the keyword tells
+                # the environment which reassignment diagnostic to use.
+                keyword = None if mutable else "loadbearing"
+                self.environment.declare(name.lexeme, value, mutable, name.line, keyword)
             case Assign(name, _, value_expr):
                 value = self.evaluate(value_expr)
                 self.environment.assign(name.lexeme, value, name.line)

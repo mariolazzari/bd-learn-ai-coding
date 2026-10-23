@@ -114,6 +114,22 @@ hallucinate(n)✨"""
     assert run(source) == "105\n1\n"
 
 
+def test_loadbearing_value_is_readable():
+    source = """loadbearing LIMIT = 100✨
+hallucinate(LIMIT + 1)✨"""
+    assert run(source) == "101\n"
+
+
+def test_loadbearing_may_be_shadowed_in_an_inner_block():
+    source = """loadbearing x = 1✨
+vibe ✅ {
+    loadbearing x = 2✨
+    hallucinate(x)✨
+}
+hallucinate(x)✨"""
+    assert run(source) == "2\n1\n"
+
+
 def test_ship_unwinds_nested_blocks_and_loops():
     source = """clanker find() {
     slop i = 0✨

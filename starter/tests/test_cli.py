@@ -34,3 +34,57 @@ def test_missing_file_and_usage():
     missing = run_cli(str(ROOT / "nope.slop"))
     assert missing.returncode == 2
     assert "could not read" in missing.stderr
+
+
+def test_check_mode_accepts_syntax_without_executing(tmp_path: Path):
+    program = tmp_path / "runtime_error.slop"
+    program.write_text("hallucinate(missing)✨\n", encoding="utf-8")
+    completed = run_cli("--check", str(program))
+    assert completed.returncode == 0
+    assert completed.stdout == ""
+    assert completed.stderr == ""
+
+
+def test_check_mode_does_not_print(tmp_path: Path):
+    program = tmp_path / "print.slop"
+    program.write_text("hallucinate(“executed”)✨\n", encoding="utf-8")
+    completed = run_cli("--check", str(program))
+    assert completed.returncode == 0
+    assert "executed" not in completed.stdout
+
+
+def test_check_flag_may_follow_the_path(tmp_path: Path):
+    program = tmp_path / "ok.slop"
+    program.write_text("slop x = 1✨\n", encoding="utf-8")
+    completed = run_cli(str(program), "--check")
+    assert completed.returncode == 0
+
+
+def test_check_reports_a_syntax_error(tmp_path: Path):
+    program = tmp_path / "broken.slop"
+    program.write_text("slop x = 1\n", encoding="utf-8")
+    completed = run_cli("--check", str(program))
+    assert completed.returncode == 1
+    assert completed.stdout == ""
+    assert "syntax error" in completed.stderr
+    assert "Traceback" not in completed.stderr
+
+
+def test_check_reports_a_lexical_error(tmp_path: Path):
+    program = tmp_path / "quotes.slop"
+    program.write_text('hallucinate("hi")✨\n', encoding="utf-8")
+    completed = run_cli("--check", str(program))
+    assert completed.returncode == 1
+    assert "lexical error" in completed.stderr
+
+
+def test_validate_is_an_alias_for_check(tmp_path: Path):
+    program = tmp_path / "ok.slop"
+    program.write_text("slop x = 1✨\n", encoding="utf-8")
+    assert run_cli("--validate", str(program)).returncode == 0
+
+
+def test_check_usage_and_unknown_option():
+    assert run_cli("--check").returncode == 2
+    assert run_cli("--nope", "x.slop").returncode == 2
+    assert "unknown option '--nope'" in run_cli("--nope", "x.slop").stderr

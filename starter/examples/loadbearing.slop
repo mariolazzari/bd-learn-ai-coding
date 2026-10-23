@@ -1,0 +1,11 @@
+— loadbearing declares an immutable variable; it still follows slop's scoping rules.
+loadbearing MAX = 3✨
+slop count = 0✨
+
+ralph count < MAX {
+    loadbearing label = “scoped”✨
+    hallucinate(label)✨
+    hallucinate(count)✨
+    count = count + 1✨
+}
+hallucinate(MAX)✨
