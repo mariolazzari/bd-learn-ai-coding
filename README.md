@@ -228,3 +228,72 @@ It's easy to learn to write better prompts. It's hard to learn to code and under
 ### Speech to text
 
 You don't need to polish a spoken prompt as you would a PR description meant for a human. Agents have no problem understanding messy wording and corrections like "Um, actually, forget that, do this other thing," but what helps is the extra context you provide, not the additional words themselves.
+
+## Agents
+
+### Agent
+
+Agents in OpenCode are configurable AI assistants with their own prompts, models, and permissions.
+
+OpenCode ships with two built-in primary agents, "Build" and "Plan", but you can also create your own with custom tools, model settings, instructions, etc.
+
+### Temperature
+
+Lower temperature (closer to 0.0) means:
+- More focused responses
+- Less randomness
+
+Higher temperature (closer to 1.0) means:
+- More variety and "creativity" (scare quotes intended)
+- Less control over the output
+
+### Custom Agents
+
+A custom agent can be defined easily with a Markdown file. And OpenCode watches for changes in its config directories, so if you update an agent's settings, it will normally reload without a restart.
+
+Put the file in one of these locations:
+
+- *.opencode/agents/* for a project-specific agent
+- *~/.config/opencode/agents/* for a global agent
+
+### Max Steps
+
+Sometimes you know a task really just shouldn't take that long.
+
+You can limit your agent's ability to spin its wheels with the steps setting. Each step is one model response, which can include multiple tool calls. The results of those calls feed into the next step.
+
+### Subagents
+
+Subagents are specialized agents that your primary agent can spin off concurrently to tackle narrower jobs. OpenCode ships with two built-in subagents:
+
+- general: a general-purpose worker that can research and execute multi-step tasks
+- explore: a fast, read-only worker for codebase and web exploration
+
+### Task Permissions
+
+Just because a subagent exists doesn't mean every agent should be allowed to invoke it.
+You can control that with subagent permission rules.
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agents": {
+    "orchestrator": {
+      "mode": "primary",
+      "permissions": [
+        { "action": "subagent", "resource": "*", "effect": "deny" },
+        {
+          "action": "subagent",
+          "resource": "orchestrator-*",
+          "effect": "allow",
+        },
+        { "action": "subagent", "resource": "code-reviewer", "effect": "ask" },
+      ],
+    },
+  },
+}
+```
+
+## Context
+
+### What is context

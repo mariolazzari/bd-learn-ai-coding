@@ -22,5 +22,10 @@
       "resource": "*",
       "effect": "allow",
     },
+    {
+      "action": "subagent",
+      "resource": "explore",
+      "effect": "deny",
+    },
   ],
 }
