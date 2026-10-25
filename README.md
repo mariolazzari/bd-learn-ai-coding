@@ -315,3 +315,18 @@ Don't worry, you can use the */sessions* command to jump back and resume any pre
 - More tokens mean more cost. And larger context = more input tokens.
 - Each time you send a message, the LLM has to reprocess the entire conversation
 - Not every session you start needs to have the entirety of your codebase, docs, and session history in context
+
+### Ignoring files
+
+OpenCode's content searches use ripgrep, which respects .gitignore patterns by default. This keeps ordinary searches from getting blasted by node_modules/ or dist/ folders. That said, explicit file patterns can override those exclusions, and the agent can still read ignored files directly if needed.
+
+You don't really need anything AI-specific here. Just make sure you actually .gitignore generated files and dependencies like you normally would:
+
+- Build output (dist/, build/, generated assets)
+- Dependency trees (node_modules/, .venv/)
+- Large logs and temporary dumps
+- Binary blobs that won't help code reasoning
+
+### File watcher
+
+OpenCode watches the filesystem for relevant changes, and those events let it reload watched skills and plugins while it's still running.
