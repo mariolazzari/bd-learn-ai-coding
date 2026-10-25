@@ -297,3 +297,21 @@ You can control that with subagent permission rules.
 ## Context
 
 ### What is context
+
+Context is all the information your AI model can "see" when it's generating a response. A "context window" is the limit on how much of that information the model can work with at once.
+
+### Context as RAM
+
+The "Context" section in OpenCode's right-hand sidebar shows your current context usage in tokens and as a percentage of your model's maximum.
+
+### New sessions
+
+The */new* command in OpenCode starts a fresh conversation without carrying over the previous session's history. Project instructions still apply, and your files stay as they are.
+
+Don't worry, you can use the */sessions* command to jump back and resume any previous session at any time. Or use the tabs along the top of the TUI.
+
+### Token economics
+
+- More tokens mean more cost. And larger context = more input tokens.
+- Each time you send a message, the LLM has to reprocess the entire conversation
+- Not every session you start needs to have the entirety of your codebase, docs, and session history in context

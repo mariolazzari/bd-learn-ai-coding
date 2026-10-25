@@ -68,6 +68,24 @@ def test_string_escapes(source: str, expected: str):
     assert tokenize(source)[0].literal == expected
 
 
+def test_comment_newline_advances_line():
+    tokens = tokenize("— comment\nslop x = 1✨")
+    assert [token.line for token in tokens] == [2, 2, 2, 2, 2, 2]
+
+
+def test_comment_newline_advances_line_with_crlf():
+    tokens = tokenize("— comment\r\nslop x = 1✨")
+    assert [token.line for token in tokens] == [2, 2, 2, 2, 2, 2]
+
+
+def test_comment_without_newline_does_not_advance_line():
+    assert [token.line for token in tokenize("— comment")] == [1]
+
+
+def test_consecutive_comments_each_advance_line():
+    assert [token.line for token in tokenize("— a\n— b\n— c\nx")] == [4, 4]
+
+
 @pytest.mark.parametrize(
     ("source", "line", "message"),
     [
