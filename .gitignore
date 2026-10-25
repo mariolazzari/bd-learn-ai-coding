@@ -1,2 +1,7 @@
-node_modules
+.venv/
+.ruff_cache/
+.pytest_cache/
+__pycache__/
+.out
+node_modules/
 logs/
