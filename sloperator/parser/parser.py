@@ -150,23 +150,23 @@ class Parser:
         return expr
 
     def logic_and(self) -> Expr:
-        expr = self.comparison()
+        expr = self.equality()
         while self.match(TokenType.AND):
-            expr = Logical(expr, self.previous(), self.comparison())
+            expr = Logical(expr, self.previous(), self.equality())
         return expr
 
     def equality(self) -> Expr:
-        expr = self.term()
+        expr = self.comparison()
         while self.match(TokenType.EQUAL_EQUAL, TokenType.BANG_EQUAL):
-            expr = Binary(expr, self.previous(), self.term())
+            expr = Binary(expr, self.previous(), self.comparison())
         return expr
 
     def comparison(self) -> Expr:
-        expr = self.equality()
+        expr = self.term()
         while self.match(
             TokenType.LESS, TokenType.LESS_EQUAL, TokenType.GREATER, TokenType.GREATER_EQUAL
         ):
-            expr = Binary(expr, self.previous(), self.equality())
+            expr = Binary(expr, self.previous(), self.term())
         return expr
 
     def term(self) -> Expr:
@@ -177,9 +177,6 @@ class Parser:
 
     def factor(self) -> Expr:
         expr = self.unary()
-        return self.factor_tail(expr)
-
-    def factor_tail(self, expr: Expr) -> Expr:
         while self.match(TokenType.STAR, TokenType.SLASH):
             expr = Binary(expr, self.previous(), self.unary())
         return expr
