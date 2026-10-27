@@ -409,3 +409,35 @@ AI agents are not completely useless better when they can get fast, accurate, an
 - Run a check
 - Inspect the results of the check
 - Repeat
+
+### Static typing
+
+Static analysis can immediately tell the model that it:
+
+- Called a function with the wrong arguments
+- Returned a value of the wrong type from a function
+- Accessed a field that doesn't exist
+- Broke an interface contract somewhere downstream
+
+### Automatic formatting
+
+Without a strict formatter, your agent will spend tokens worrying about indentation, trailing commas, and line length. Not only will it waste tokens, but it will also (like any human) be inconsistent.
+
+So, just like when working with humans, always add a code formatter to your workflow and put the problem to rest. For example:
+
+- oxfmt for JavaScript/TypeScript, HTML, CSS, Markdown, and more
+- ruff for Python
+- gofmt for Go
+
+### Tests
+
+Linters and type checks tell the agent whether the code is structurally valid. Tests tell it whether the code does the right thing. There are two types of tests, generally speaking:
+
+- Unit tests for fast, local correctness checks
+- Integration tests for realistic end-to-end behavior
+
+### AI and Test Economics
+
+Writing tests with AI is way cheaper than writing them by hand, which changes the ol' "How many tests are enough tests" debate in an interesting way.
+
+These days, you can be more aggressive about adding targeted tests because the cost of writing them has come down. But "cheap to write" does not mean "generate 1,000 brittle, low-quality tests."

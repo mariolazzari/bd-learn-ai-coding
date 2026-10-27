@@ -18,6 +18,17 @@ Pipeline: source → `tokenize` → `parse` → `Interpreter(out).run(...)`.
 | `examples/`, `tests/` | Example `.slop` programs, pytest suite |
 | `playground/` | Web playground: `uv run playground/server.py` |
 
+## Formatting
+
+Run the formatter after **any** code change, before running the validation suite:
+
+```bash
+uv run ruff format
+```
+
+Do this as part of the normal workflow, not only when `ruff format --check` complains.
+Never leave formatting for the user to fix up.
+
 ## Validation
 
 Before calling a change done, all four must pass:
