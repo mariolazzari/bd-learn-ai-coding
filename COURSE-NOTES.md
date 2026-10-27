@@ -441,3 +441,11 @@ Linters and type checks tell the agent whether the code is structurally valid. T
 Writing tests with AI is way cheaper than writing them by hand, which changes the ol' "How many tests are enough tests" debate in an interesting way.
 
 These days, you can be more aggressive about adding targeted tests because the cost of writing them has come down. But "cheap to write" does not mean "generate 1,000 brittle, low-quality tests."
+
+## Skills
+
+### Skill
+
+A "skill" is (mostly) just a reusable prompt for an agent.
+
+Skills are simple, but they're useful enough to deserve serious attention. They sit in the sweet spot between "type the same giant prompt again" and "stuff every possible instruction into AGENTS.md forever."
