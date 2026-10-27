@@ -240,10 +240,12 @@ OpenCode ships with two built-in primary agents, "Build" and "Plan", but you can
 ### Temperature
 
 Lower temperature (closer to 0.0) means:
+
 - More focused responses
 - Less randomness
 
 Higher temperature (closer to 1.0) means:
+
 - More variety and "creativity" (scare quotes intended)
 - Less control over the output
 
@@ -253,8 +255,8 @@ A custom agent can be defined easily with a Markdown file. And OpenCode watches 
 
 Put the file in one of these locations:
 
-- *.opencode/agents/* for a project-specific agent
-- *~/.config/opencode/agents/* for a global agent
+- _.opencode/agents/_ for a project-specific agent
+- _~/.config/opencode/agents/_ for a global agent
 
 ### Max Steps
 
@@ -285,12 +287,12 @@ You can control that with subagent permission rules.
         {
           "action": "subagent",
           "resource": "orchestrator-*",
-          "effect": "allow",
+          "effect": "allow"
         },
-        { "action": "subagent", "resource": "code-reviewer", "effect": "ask" },
-      ],
-    },
-  },
+        { "action": "subagent", "resource": "code-reviewer", "effect": "ask" }
+      ]
+    }
+  }
 }
 ```
 
@@ -306,9 +308,9 @@ The "Context" section in OpenCode's right-hand sidebar shows your current contex
 
 ### New sessions
 
-The */new* command in OpenCode starts a fresh conversation without carrying over the previous session's history. Project instructions still apply, and your files stay as they are.
+The _/new_ command in OpenCode starts a fresh conversation without carrying over the previous session's history. Project instructions still apply, and your files stay as they are.
 
-Don't worry, you can use the */sessions* command to jump back and resume any previous session at any time. Or use the tabs along the top of the TUI.
+Don't worry, you can use the _/sessions_ command to jump back and resume any previous session at any time. Or use the tabs along the top of the TUI.
 
 ### Token economics
 
@@ -341,37 +343,69 @@ If you've never hit a context window limit using a "raw" AI provider's API, know
 
 To avoid this, OpenCode (like other coding agents) will automatically compact your session as you approach the context window limit. In practice, and assuming you're using a model with a reasonably large window, you'll likely never have a "hard stop" because OpenCode's auto-compaction will keep you in safe territory.
 
-You can also trigger it manually at any time with the */compact* command
+you can also trigger it manually at any time with the _/compact_ command
 
-## Rules
+### Configure compaction
 
-### Agents
+- _auto_: whether to compact automatically near context limits. It defaults to true, and usually you want it to stay that way.
+- _keep.tokens_: the approximate number of tokens of recent context that OpenCode tries to preserve (in addition to the summary).
+- _buffer_: the safety margin, in tokens, below the model's limit; increasing it can trigger compaction earlier.
 
-OpenCode automatically looks for AGENTS.md in two places:
+### Undo & redo
 
-- *Project-level*: OpenCode starts from your current working directory and walks up to your home directory. If your project is outside of your home directory, the search stops at the project root instead. So, if you start OpenCode in ~/project/src/ and have a ~/project/src/AGENTS.md file and another at the project root ~/project/AGENTS.md, both get loaded.
+I like to think of my session contexts more as "resources" than "conversations." They're ultimately logs of text, so it's easy to build tools for manipulating them. Just like git makes manipulating code changes super powerful, some agent session management tools can edit session context in ingenious ways.
 
-- *Global*: at ~/.config/opencode/AGENTS.md. This is for personal defaults you want across all your projects (like "Always leave changes unstaged for my review" or "You can find examples of my writing style in ~/prose").
+### Forking
 
-### Rule precedence
+Another powerful context-manipulation command is /fork. It creates a new session with the same context as the current session – while also letting you quickly choose a "fork point" from the recent message history.
 
-In a large project, you might store agent rules in several places:
+Sometimes I want to try a different approach, but I don't want to recreate all the context and history of my current session from scratch. I just fork off the latest message that has the context I actually want, and keep going in the new session.
 
-- A repo-root AGENTS.md
-- A nested AGENTS.md in a subdirectory for a specific package
-- A global ~/.config/opencode/AGENTS.md on your machine
+- Branch to try a risky idea.
+- Keep the main session clean.
+- Return to the main session if the experiment fails.
 
-### Writing an Agent
+### Secrets in context
 
-Writing a good AGENTS.md is simple, but not easy. A good rules file will differ from any "prompt template" you've seen online because every team, project, and domain is different.
+Anything you put in an OpenCode session can become part of the model's context. That includes pasted text, file contents, and shell output. Copying or exporting the session can spread that information further.
 
-### Agents vs readme
+So yes, developer secrets (passwords, API keys, tokens, etc.) can leak into "context" in many ways, not just through committed code.
 
-- Readme for humans
-- Agents for clankers
+#### The Good News
 
-### Updating rules
+OpenCode's default permissions allow read for most files, but .env files ask for your approval by default.
+The shell tool runs with your user's host permissions, so treat shell access as real terminal access, not as a filesystem sandbox.
 
-An out-of-date AGENTS.md is worse than no AGENTS.md at all.
+#### The Bad News
 
-Stale rules actively mislead the agent. For example, if your rules say "use the users table," but you renamed it to accounts, the agent might confidently write queries against a table that doesn't exist (at least, until the tests fail). Worse, it would have discovered the correct name right off the bat if you simply didn't have a bad AGENTS.md file.
+Not all secrets are in .env files. You can still leak secrets by:
+
+- Pasting API keys directly into the chat
+- Approving a shell command that prints secret values
+- Letting logs dump authentication tokens into the terminal
+- Allowing OpenCode to run a script that accesses other parts of the filesystem
+- Copying or exporting a contaminated session into another system
+
+#### Best Practices
+
+Tune your permissions to deny reads of files you use for secrets, or require explicit approval. For example, this rule in opencode.jsonc blocks the read tool from opening .secrets files:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permissions": [
+    { "action": "read", "resource": "*.secrets", "effect": "deny" }
+  ]
+}
+```
+
+## Feedback loops
+
+### Loops
+
+AI agents are not completely useless better when they can get fast, accurate, and automated feedback about their work. A feedback loop is simple:
+
+- Attempt a change
+- Run a check
+- Inspect the results of the check
+- Repeat
