@@ -624,3 +624,36 @@ This tool can also inspect:
 - Lighthouse audits
 - Performance traces
 - JavaScript memory usage (with the --memory-debugging flag)
+
+## Plugins
+
+### Plugins
+
+Plugins extend OpenCode itself. They run code inside the agent harness, kinda like editor extensions for VS Code or Neovim.
+
+Plugins can do things like:
+
+- Hook into tool execution
+- Modify model context before a model call
+- Add support for a new authentication flow
+- Register new agents, commands, skills, or tools
+
+### Loading Plugins
+
+OpenCode automatically loads .ts and .js plugin files from these directories:
+
+- Project-level: .opencode/plugins/
+- Global: ~/.config/opencode/plugins/
+
+Project plugins are for team behavior in a given repo; global plugins (i.e., global to your system user account) are personal.
+
+### Install Plugins
+
+If you want to install someone else's plugin, just add the relevant npm package name to the plugins array in opencode.jsonc:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugins": ["opencode-example-plugin", "@my-org/custom-plugin"],
+}
+```
