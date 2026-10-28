@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@opencode/plugin": "2.0.3"
+    "@opencode/plugin": "2.0.3",
+    "@playwright/mcp": "^0.0.83",
+    "playwright": "1.63.0"
   }
 }

@@ -11,6 +11,38 @@
     },
     "buffer": 20000
   },
+  "mcp": {
+    "servers": {
+      "context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp",
+        "enabled": true
+      },
+      "notion": {
+        "type": "remote",
+        "url": "https://mcp.notion.com/mcp",
+        "enabled": true,
+        "disabled": true,
+        "oauth": {}
+      },
+      "playwright": {
+        "type": "local",
+        "command": [
+          "bunx",
+          "--bun",
+          "@playwright/mcp@0.0.83",
+          "--isolated"
+        ],
+        "enabled": true,
+        "disabled": true
+      },
+      "chrome-devtools": {
+        "type": "local",
+        "command": ["bunx", "--bun", "--isolated", "chrome-devtools-mcp@latest"],
+        "enabled": true
+      }
+    }
+  },
   "permissions": [
     {
       "action": "shell",

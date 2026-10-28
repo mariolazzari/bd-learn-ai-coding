@@ -114,6 +114,21 @@ hallucinate(n)✨"""
     assert run(source) == "105\n1\n"
 
 
+def test_identifiers_may_contain_digits():
+    source = """slop score2 = 40✨
+score2 = score2 + 2✨
+hallucinate(score2)✨"""
+    assert run(source) == "42\n"
+
+
+def test_function_and_parameter_names_may_contain_digits():
+    source = """clanker add2(x1, y2) {
+    ship x1 + y2✨
+}
+hallucinate(add2(40, 2))✨"""
+    assert run(source) == "42\n"
+
+
 def test_loadbearing_value_is_readable():
     source = """loadbearing LIMIT = 100✨
 hallucinate(LIMIT + 1)✨"""

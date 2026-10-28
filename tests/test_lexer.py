@@ -51,6 +51,17 @@ def test_hallucinate_is_an_identifier_not_a_keyword():
     assert tokenize("hallucinate")[0].type is TokenType.IDENTIFIER
 
 
+@pytest.mark.parametrize("name", ["score2", "x1", "a0b9", "_2fast", "MAX_3"])
+def test_identifier_may_contain_digits_after_the_first_character(name: str):
+    assert tokenize(name)[0] == Token(TokenType.IDENTIFIER, name, None, 1)
+
+
+def test_identifier_cannot_start_with_a_digit():
+    tokens = tokenize("2fast")
+    assert tokens[0] == Token(TokenType.NUMBER, "2", 2, 1)
+    assert tokens[1] == Token(TokenType.IDENTIFIER, "fast", None, 1)
+
+
 def test_string_may_contain_em_dash_and_opening_quote():
     assert tokenize("“x — “y”")[0].literal == "x — “y"
 

@@ -508,3 +508,119 @@ OpenCode's command pipeline supports a few useful prompt features:
 - Shell output injection like !`bun test`
 
 These are command features. Invoking a skill with @skill-id activates the skill body without parsing command arguments or shell blocks (but it's still valid to invoke a skill and provide additional instructions in the same prompt).
+
+## Model Context Protocol
+
+### MCP
+
+MCP, or Model Context Protocol, is an open standard for systems (usually web APIs, but not necessarily) to expose tools, prompts, and data to AI agents.
+
+That means an MCP server can give your agent access to things like:
+
+- Issue trackers
+- External docs
+- Databases
+- Internal APIs
+
+#### Architecture
+
+There are three main components to an MCP system:
+
+- MCP Host: The AI application that coordinates and manages one or multiple MCP clients
+- MCP Client: A component that maintains a connection to an MCP server and obtains context from the server for the MCP host to use
+- MCP Server: A program that provides context to MCP clients
+
+### Configure MCP
+
+You configure MCP servers in your OpenCode config:
+
+- Project-level: opencode.jsonc (in the project root)
+- Global: ~/.config/opencode/opencode.jsonc
+
+### OAuth
+
+OpenCode supports two forms of authentication:
+
+- API-key-style auth through custom headers
+- OAuth flows that OpenCode can kick off and manage
+
+#### CLI Commands
+
+If you're having trouble with authentication, here are a few of the commands that can help you debug:
+
+- opencode mcp list: List all servers and their authorization status.
+- opencode mcp auth <name>: Authenticate with an MCP server.
+- opencode mcp logout <name>: Remove stored credentials.
+
+### Code Mode
+
+When presented with too many tools, models can struggle with calling the right tool or calling it correctly.
+
+One thing models are trained to do is write code. Code Mode bridges what models do really well, and what MCP does well. It exposes tools through a JavaScript API so the model can execute code to search for tools, call tools, and process the results.
+
+### Context Bloat
+
+MCP servers can be useful, but just like everything in LLMs: tool bloat becomes context bloat.
+
+Once you configure an MCP server, OpenCode has to describe its tools to the model. That catalog eats context whether the model calls a tool or not. Disable servers you're not using.
+
+## Computer Use
+
+### Computer Use
+
+Coding agents are happiest when they can use precise tools. Reading a file is easier with a read tool than by opening an editor and dragging a mouse over the text. Sometimes, though, the graphical user interface (GUI) is the thing that needs to be tested.
+
+Computer use lets a model inspect a screen and operate graphical applications with actions like clicking, typing, scrolling, and switching windows. ChatGPT Computer Use and Claude's computer use build these controls directly into their desktop applications.
+
+OpenCode doesn't currently include a general-purpose desktop controller. That said, it can still operate browsers through external tools, which is where most coding-related computer use happens anyway!
+
+### Browser Automation
+
+Now, a browser is still a graphical application, but it does expose way more structure than your typical native desktop app. It makes sense: web apps are built on structured text! So text-based browser automation tools can easily inspect:
+
+- The document structure
+- The accessibility tree
+- Console messages
+- Network requests
+- Page layout measurements
+
+### Accessibility Trees
+
+A screenshot can tell a model what a page looks like, but an accessibility tree tells it what all the controls mean.
+
+Luckily, browsers build the accessibility tree straight from the DOM. It contains semantic information that assistive technology and browser tools can understand:
+
+- Name: Add application
+- Role: button
+- State: enabled
+- Description: Extra context when the name isn't enough
+
+### Vision Models
+
+A vision model can accept image input along with text. Instead of reading a semantic description of a page, it can inspect the screenshot's pixels.
+
+OpenCode supports image attachments and passes image results from tools to models that can accept them. Not every model does, so be sure to check a model's capabilities before you pay for a bunch of tokens or a subscription.
+
+Pixels sometimes expose problems that structured browser data simply can't:
+
+- Awkward spacing
+- Clipped or overlapping content
+- Broken responsive layouts
+- Charts, canvases, and other graphical output
+- A page that technically works but looks like a Craigslist ad from 2004
+
+### Playwright MCP
+
+Playwright MCP gives an agent control of a real browser via the Model Context Protocol (MCP). It can navigate pages, inspect accessibility snapshots, fill forms, click controls, and capture screenshots.
+
+### Chrome DevTools MCP
+
+Chrome DevTools MCP can navigate, click, fill forms, inspect semantic page snapshots, and take screenshots. That overlaps with Playwright MCP, to be fair, but Chrome DevTools goes deeper into Chrome itself.
+
+This tool can also inspect:
+
+- Console messages and source-mapped errors
+- Network requests and responses
+- Lighthouse audits
+- Performance traces
+- JavaScript memory usage (with the --memory-debugging flag)

@@ -63,7 +63,6 @@
         resize: vertical;
       }
       pre {
-        min-width: 800px;
         min-height: 6rem;
         margin: 0.75rem 0 0;
         padding: 0.75rem;
@@ -123,10 +122,6 @@ ralph count < MAX {
             body: JSON.stringify({ source: source.value }),
           });
           const result = await response.json();
-          if (result.stderr) {
-            output.textContent = "";
-            return;
-          }
           output.textContent = result.stdout;
           if (result.stderr) {
             const err = document.createElement("span");
