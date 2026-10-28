@@ -88,6 +88,8 @@ score = score + 1✨
 
 Assignment is a statement, not an expression: `name = expression✨`. It updates the nearest existing `slop` variable. Assigning to a `loadbearing` binding is a runtime error: `cannot assign to loadbearing '<name>'`. Reading or assigning an undefined name is a runtime error.
 
+Compound assignment `name += expression✨` evaluates the right-hand expression first, then adds it to the variable's current value and stores the result in the nearest existing `slop` variable. It follows the same rules as `+`: two numbers add, two strings concatenate, and any other combination is a runtime error. Undefined names and `loadbearing` bindings are runtime errors, exactly as with plain assignment.
+
 Every brace block is a lexical scope. Assignment searches the current scope, then each enclosing scope.
 
 ## Control Flow

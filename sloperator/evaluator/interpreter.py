@@ -65,8 +65,11 @@ class Interpreter:
                 # the environment which reassignment diagnostic to use.
                 keyword = None if mutable else "loadbearing"
                 self.environment.declare(name.lexeme, value, mutable, name.line, keyword)
-            case Assign(name, _, value_expr):
+            case Assign(name, operator, value_expr):
                 value = self.evaluate(value_expr)
+                if operator.type is TokenType.PLUS_EQUAL:
+                    current = self.environment.get(name.lexeme, name.line)
+                    value = self.add(current, value, operator)
                 self.environment.assign(name.lexeme, value, name.line)
             case ExprStmt(expression):
                 self.evaluate(expression)
@@ -81,7 +84,7 @@ class Interpreter:
             case Ship(_, value_expr):
                 raise ShipSignal(self.evaluate(value_expr))
             case Block():
-                self.execute_block(statement, Environment(self.globals))
+                self.execute_block(statement, Environment(self.environment))
             case FunctionDecl(name, _, _):
                 self.environment.declare(name.lexeme, SlopFunction(statement), False, name.line)
             case _:
@@ -179,6 +182,9 @@ class Interpreter:
                 f"operands of '{operator.lexeme}' must be numbers, "
                 f"got {type_name(left)} and {type_name(right)}",
             )
+        return self.numeric_binary(left, operator, right)
+
+    def numeric_binary(self, left: int, operator: Token, right: int) -> Value:
         match operator.type:
             case TokenType.MINUS:
                 return left - right

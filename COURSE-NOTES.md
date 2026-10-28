@@ -699,3 +699,68 @@ An OpenCode plugin published on npm uses the same default export as a local plug
 ```
 
 ## Best practices
+
+### Accountability
+
+As an AI-enabled software engineer, now more than ever (although this has always been true), the value you provide to your team is not the number of lines of code you generate write.
+
+Also, no matter how great an agent is at producing code, the CEO of a company isn't going to spend all their time prompting the agent to code for them. They have other things to do (at least, the good ones...).
+
+### Evidence Debugging
+
+Agents are pretty good at reading code and guessing what might be wrong, but "pretty good at guessing" is not the bar for production code.
+
+The most effective tactic for AI debugging is to push it toward concrete evidence as quickly as possible:
+
+- Traces
+- Structured logs
+- Failing test outputs
+- Reproduction scripts
+- User reports/issues
+- Real request/response payloads with secrets removed
+
+### Refactoring
+Refactoring is when you take some code that does something, and change it!
+Well, the same thing in a better way. By "better," we usually mean:
+
+- More readable
+- More maintainable
+- More extensible
+
+### Good Code
+
+Perhaps counterintuitively, in a world with AI coding agents, great codebases are more important than before. You'll hear business people opining that "the code doesn't matter anymore" or "the cost of producing software is going to zero," but those are uninformed opinions from non-technical people. Sorry not sorry.
+
+Agents primarily want to finish the task in front of them. They do not inherently care about:
+
+- The engineer who will read this code two months from now
+- The next task in your Jira backlog that will build on this change
+- The function on line 117 that seems to do nothing, but which Steve said NOT TO TOUCH because prod breaks in weird ways if you delete it
+
+### Incremental Changes
+
+I'm not gonna lie, it does feel really nice when you write a fat, detailed prompt and refine it with the agent, then the agent one-shots a 1,000-line change in almost exactly the way you wanted it.
+
+And that does happen.
+
+But you can also waste a lot of time pulling the slot machine lever again and again, hoping for that sweet jackpot.
+
+When you can break a change into smaller steps, it's still a good idea to do so. Context isn't infinite, and the smaller the changeset, the quicker it is to get the agent back on track when it inevitably isn't doing quite what you want.
+
+### Workflow
+
+The tasks you work on will vary from single-line changes to multi-file features that require new infrastructure to be deployed.
+
+That means sometimes your workflow will be as simple as one-shotting a single-sentence prompt. Other times, it will be a full 30-message back and forth with the agent before you even let it change a single line. And sometimes, you'll still execute the change (gasp) by hand.
+
+That said, in most cases, the following basic workflow will serve you well. Have the agent:
+
+- Explore the codebase and constraints
+- Plan the change if it's non-trivial
+- Implement the smallest correct version
+- Verify with real feedback loops
+
+### Multiple Agents
+
+Are you ready for the hack? The one trick that can finally make you a 10x engineer?
+... okay, maybe not. But a 1.2x engineer? Or a 2x engineer? In my experience, it's closer to 1.5x.
