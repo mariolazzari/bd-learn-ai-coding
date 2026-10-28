@@ -28,6 +28,11 @@
       "effect": "allow"
     },
     {
+      "action": "skill",
+      "resource": "create-test-program",
+      "effect": "ask"
+    },
+    {
       "action": "subagent",
       "resource": "explore",
       "effect": "deny"

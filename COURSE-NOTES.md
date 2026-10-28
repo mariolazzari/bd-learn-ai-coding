@@ -449,3 +449,53 @@ These days, you can be more aggressive about adding targeted tests because the c
 A "skill" is (mostly) just a reusable prompt for an agent.
 
 Skills are simple, but they're useful enough to deserve serious attention. They sit in the sweet spot between "type the same giant prompt again" and "stuff every possible instruction into AGENTS.md forever."
+
+### Writing Skills
+
+Again, a skill is just a directory with a Markdown file that has YAML frontmatter at the top. Here's an example from the OpenCode maintainers:
+
+- Project-specific skills: .agents/skills/<name>/SKILL.md
+- Global (personal) skills: ~/.agents/skills/<name>/SKILL.md
+
+### Skills are tools
+
+Skills aren't just manually invocable Markdown files. OpenCode also exposes them through the native skill tool.
+
+- Skills you and your team write that are hyper-specific to your project and workflow
+- Skills that are published alongside a library or API so that users of those products can give their agents instructions for how to use them more effectively.
+
+### Skills permissions
+
+- _allow_: the skill loads immediately
+- _ask_: OpenCode asks before loading it
+- _deny_: the skill is hidden from the agent and inaccessible to it
+
+### Composable Skills
+
+The best skills are small and narrow enough that they're useful for many different types of tasks.
+
+Try to follow the time-tested Unix philosophy of "do one thing and do it well." If you have a massive skill, consider breaking it up into a few more reusable ones.
+
+- _review_: Reviews the current working directory for any changes, and calls attention to any issues
+- _commit_: Stages and commits changes with a conventional commit message, no more than one sentence long
+- _sync_: Rebases the current branch onto main, resolves conflicts, and squashes
+- _publish_: Pushes to the feature branch and creates a PR for Allan
+
+### Skill, Tool, or Agent?
+
+Skills, tools, and agents all feel like "things that do stuff," which makes it hard to know which is best for a given task that you're trying to automate. Here's how I think about it.
+
+- Is it mostly custom code with defined inputs and outputs? It's a tool.
+- Is it a mostly a custom prompt with some optional assets on disk? It's a skill.
+- Is it a "mode of operation" that uses tools and skills with a specific set of permissions and settings? It's an agent.
+
+### Custom Commands
+
+Custom commands and skills are very similar.
+
+Both are basically reusable prompt templates. Both help you avoid retyping the same instructions. Both can live at the project level or globally.
+
+But there are a couple of important differences.
+
+- A skill is exposed through OpenCode's native skill tool, meaning it's in context and can be loaded when the agent chooses to.
+- A command is primarily a user-invoked TUI shortcut.

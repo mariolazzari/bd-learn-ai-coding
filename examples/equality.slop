@@ -1,0 +1,4 @@
+— Equality compares any values; different types are never equal.
+hallucinate(1 == 1)✨
+hallucinate(1 == “1”)✨
+hallucinate(✅ == 1)✨
