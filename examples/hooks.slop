@@ -1,0 +1,5 @@
+clanker describe(count) {
+    ship “hooks work”✨
+}
+
+hallucinate(describe(✅))✨

@@ -657,3 +657,45 @@ If you want to install someone else's plugin, just add the relevant npm package 
   "plugins": ["opencode-example-plugin", "@my-org/custom-plugin"],
 }
 ```
+
+### Plugin Transforms
+
+Transforms let plugins change the definitions OpenCode uses for tools, agents, models, and other features. For example, a plugin can adjust a tool's description or choose a default agent.
+
+This is useful when you're packaging a customized OpenCode experience for a team. The plugin can inspect existing definitions and apply changes in code.
+
+### Plugin Hooks
+
+Hooks let plugins intercept live OpenCode operations and inspect or modify them.
+
+OpenCode provides a variety of runtime hooks. Here are some examples (not exhaustive):
+
+- ctx.tool.hook("execute.before", callback) runs before a tool executes
+- ctx.tool.hook("execute.after", callback) runs after a tool succeeds or fails
+- ctx.session.hook("context", callback) modifies the system prompt, messages, or tools before a model call
+- ctx.session.hook("http.request", callback) inspects or modifies a provider request
+- ctx.session.hook("http.response", callback) inspects or replaces a provider response
+
+### Plugin Tools
+
+OpenCode registers every custom tool through a plugin. A published plugin can bundle tools with commands, skills, agents, or hooks so other developers can install the whole extension at once.
+
+Use a skill or agent when a workflow needs only instructions. Add a tool when it needs code, for example to query an API or database.
+
+### Publishing Plugins
+
+An OpenCode plugin published on npm uses the same default export as a local plugin. So if you want to publish a plugin, you can treat it as a normal ECMAScript module (ESM), with the plugin runtime listed in dependencies:
+
+```json
+{
+  "name": "my-slop-opencode-plugin",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": "./dist/index.js",
+  "dependencies": {
+    "@opencode/plugin": "2.0.3"
+  }
+}
+```
+
+## Best practices
