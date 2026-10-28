@@ -499,3 +499,12 @@ But there are a couple of important differences.
 
 - A skill is exposed through OpenCode's native skill tool, meaning it's in context and can be loaded when the agent chooses to.
 - A command is primarily a user-invoked TUI shortcut.
+
+### Dynamic Prompts
+
+OpenCode's command pipeline supports a few useful prompt features:
+
+- Positional arguments like $1, $2, and $ARGUMENTS
+- Shell output injection like !`bun test`
+
+These are command features. Invoking a skill with @skill-id activates the skill body without parsing command arguments or shell blocks (but it's still valid to invoke a skill and provide additional instructions in the same prompt).
